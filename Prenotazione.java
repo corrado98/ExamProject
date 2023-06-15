@@ -20,8 +20,8 @@ public class Prenotazione {
     @Override
     public String toString() {
         return "Prenotazione{ " +
-                "medico: " + m.getName() +" "+ m.getSurname() +
-                ", paziente: "+ p.getName()+" "+p.getSurname() +
+                "Medico: " + m.getName() +" "+ m.getSurname() +
+                ", Paziente: "+ p.getName()+" "+p.getSurname() +
                 '}';
     }
 }
