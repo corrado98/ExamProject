@@ -5,8 +5,8 @@ public class Prenotazione {
     private Paziente p;
     private Medico m;
 
-    private String orario;
-    private Date giorno;
+    /*private String orario;
+    private Date giorno;*/
 
     public Prenotazione(Paziente p, Medico m) {
         this.p = p;
