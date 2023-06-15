@@ -10,6 +10,11 @@ public class Persona {
         this.age = age;
     }
 
+    public Persona(String name, String surname) {
+        this.name = name;
+        this.surname = surname;
+    }
+
     public String getName() {
         return name;
     }
@@ -30,7 +35,7 @@ public class Persona {
         return age;
     }
 
-    public void setAge(int age) {
+    public void setAge(int age) throws Exception {
         this.age = age;
     }
 

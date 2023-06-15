@@ -2,17 +2,21 @@ public class Paziente extends Persona{
 
     private String CodiceFiscale;
 
-    public Paziente(String name, String surname, int age, String CodiceFiscale) {
+    public Paziente(String name, String surname, int age) {
         super(name, surname, age);
-        this.CodiceFiscale = CodiceFiscale;
     }
+
 
     public String getCodiceFiscale() {
         return CodiceFiscale;
     }
 
-    public void setCodiceFiscale(String codiceFiscale) {
-        CodiceFiscale = codiceFiscale;
+    public void setCodiceFiscale(String codiceFiscale) throws Exception{
+        if(codiceFiscale.length() != 14){
+            throw new Exception("Il codice fiscale deve avere 14 caratteri");
+        }else {
+            CodiceFiscale = codiceFiscale;
+        }
     }
 
     @Override
