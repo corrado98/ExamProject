@@ -13,7 +13,7 @@ public class Paziente extends Persona{
 
     public void setCodiceFiscale(String codiceFiscale) throws Exception{
         if(codiceFiscale.length() != 14){
-            throw new Exception("Il codice fiscale deve avere 14 caratteri");
+            throw new Exception("The fiscal code must have 14 characters");
         }else {
             CodiceFiscale = codiceFiscale;
         }

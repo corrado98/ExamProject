@@ -19,7 +19,7 @@ public class Medico extends Persona{
     @Override
     public void setAge(int age) throws Exception{
         if(age <25 || age > 65){
-            throw new Exception("Il medico deve avere un'età compresa tra i 25 e i 65 anni");
+            throw new Exception("The doctor must be between 25 and 65 years of age");
         }else {
             super.setAge(age);
         }
