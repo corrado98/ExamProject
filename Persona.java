@@ -37,8 +37,8 @@ public class Persona {
     @Override
     public String toString() {
         return "Persona{ " +
-                "name: " + name +
-                ", surname: " + surname +
-                ", age=" + age + " }";
+                "name: " + this.getName() +
+                ", surname: " + this.getSurname()+
+                ", age=" + this.getAge() + " }";
     }
 }

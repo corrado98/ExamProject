@@ -20,7 +20,7 @@ public class Paziente extends Persona{
         return "Paziente{" +  " name: " + super.getName() +
                 ", surname: " + super.getSurname() +
                 ", age= " + super.getAge() +
-                ", CodiceFiscale= " + CodiceFiscale  +
+                ", CodiceFiscale= " + this.getCodiceFiscale()  +
                 '}';
     }
 }

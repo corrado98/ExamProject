@@ -20,7 +20,7 @@ public class Medico extends Persona{
         return "Medico{" +  " name: " + super.getName() +
                 ", surname: " + super.getSurname() +
                 ", age= " + super.getAge() +
-                ", specializzazione: " + specializzazione +
+                ", specializzazione: " + this.getSpecializzazione() +
                 '}';
     }
 }
