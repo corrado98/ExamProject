@@ -17,7 +17,7 @@ public class Client {
         Doctor d3 = new Doctor("Fausta", "Verdi", "Otolaryngologist");
         Doctor d4 = new Doctor("Maria", "Gialli", "Psychiatrist");
         Doctor d5 = new Doctor("Guglielmo", "Neri", "Pulmonologist");
-        Doctor d6 = new Doctor("Laura", "Grigi", "gynecologist");
+        Doctor d6 = new Doctor("Laura", "Grigi", "Gynecologist");
 
         doc_lis.add(d1);
         doc_lis.add(d2);
@@ -71,7 +71,7 @@ public class Client {
                         System.out.println("Select one of the following doctors: ");
                         int i=1;
                         for(Doctor d:doc_lis) {
-                            System.out.println(i+" "+d);
+                            System.out.println(i+") "+d);
                             i=i+1;
                         }
                         System.out.println("Insert the number corresponding to the doctor");

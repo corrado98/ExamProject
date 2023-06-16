@@ -44,7 +44,7 @@ public class Prova {
 
         int i=1;
         for(Doctor d:doc_lis) {
-            System.out.println(i+" "+d);
+            System.out.println(i+") "+d);
             i=i+1;
         }
         System.out.println("Insert the number corresponding to the doctor");
