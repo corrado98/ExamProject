@@ -1,16 +1,17 @@
-public class Persona {
+import java.io.Serializable;
+
+public class Person implements Serializable {
     private String name;
     private String surname;
     private int age;
 
-
-    public Persona(String name, String surname, int age) {
+    public Person(String name, String surname, int age) {
         this.name = name;
         this.surname = surname;
         this.age = age;
     }
 
-    public Persona(String name, String surname) {
+    public Person(String name, String surname) {
         this.name = name;
         this.surname = surname;
     }
@@ -41,7 +42,7 @@ public class Persona {
 
     @Override
     public String toString() {
-        return "Persona{ " +
+        return "Person{ " +
                 "name: " + this.getName() +
                 ", surname: " + this.getSurname()+
                 ", age=" + this.getAge() + " }";

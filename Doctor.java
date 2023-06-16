@@ -1,9 +1,9 @@
-public class Medico extends Persona{
+public class Doctor extends Person {
 
     private String specializzazione;
 
 
-    public Medico(String name, String surname, String specializzazione) {
+    public Doctor(String name, String surname, String specializzazione) {
         super(name, surname);
         this.specializzazione = specializzazione;
     }
@@ -27,9 +27,8 @@ public class Medico extends Persona{
 
     @Override
     public String toString() {
-        return "Medico{" +  " name: " + super.getName() +
+        return "Doctor{" +  " name: " + super.getName() +
                 ", surname: " + super.getSurname() +
-                ", age= " + super.getAge() +
                 ", specializzazione: " + this.getSpecializzazione() +
                 '}';
     }
