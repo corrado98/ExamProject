@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Prova {
 
@@ -47,6 +48,27 @@ public class Prova {
             System.out.println(i+") "+d);
             i=i+1;
         }
+
         System.out.println("Insert the number corresponding to the doctor");
+
+        System.out.println("********* Utilizzo futuro di una mappa *********");
+        HashMap<String, Doctor> map = new HashMap<String, Doctor>();
+
+        map.put(d1.getName(), d1);
+        map.put(d2.getName(),d2);
+        System.out.println(map);
+        System.out.println(map.get("Mario"));
+        System.out.println("Levo Mario Rossi");
+        map.remove("Mario");
+        System.out.println(map);
+
+
+        String s = "Ciao come va";
+        String[] array1= s.split(" ");
+        //char[] s1=s.toArray();
+        //System.out.println(array1);
+        for(String st : array1){
+            System.out.println(st);
+        }
     }
 }

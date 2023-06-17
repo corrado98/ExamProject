@@ -75,7 +75,12 @@ public class Client {
                             i=i+1;
                         }
                         System.out.println("Insert the number corresponding to the doctor");
-                        var medico = input.nextLine();
+                        var number = Integer.parseInt(input.nextLine());
+                        var doc = doc_lis.get(number - 1);
+                        //var doctor = (String) doc;
+                        var doc_name = doc.getName();
+                        var doc_surname = doc.getSurname();
+                        var doc_spec = doc.getSpecializzazione();
 
                         pw.println("CMD_ADD_PERSON");
                         pw.flush();
@@ -87,7 +92,13 @@ public class Client {
                         pw.flush();
                         pw.println(FC);
                         pw.flush();
-                        pw.println(medico);
+                        pw.println(doc_name);
+                        pw.flush();
+                        pw.println(doc_surname);
+                        pw.flush();
+                        pw.println(doc_spec);
+                        pw.flush();
+                        pw.println("END_CMD");
                         pw.flush();
                         break;
 
