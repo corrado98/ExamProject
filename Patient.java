@@ -6,14 +6,13 @@ public class Patient extends Person {
         super(name, surname, age);
     }
 
-
     public String getFiscalCode() {
         return FiscalCode;
     }
 
     public void setFiscalCode(String FiscalCode) throws Exception{
-        if(FiscalCode.length() != 14){
-            throw new Exception("The fiscal code must have 14 characters");
+        if(FiscalCode.length() != 16){
+            throw new Exception("The fiscal code must have 16 characters");
         }else {
             this.FiscalCode = FiscalCode;
         }

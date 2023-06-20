@@ -4,6 +4,7 @@ import java.util.HashMap;
 public class Prova {
 
     public static void main(String[] args) {
+        /*
         Person p1 = new Person("Corrado", "Caia", 24);
         System.out.println(p1);
 
@@ -24,8 +25,8 @@ public class Prova {
         }
         System.out.println(paz1);
 
-        Reservation reservation1 = new Reservation(paz1, m1);
-        System.out.println(reservation1);
+        //Reservation reservation1 = new Reservation(paz1, m1);
+        //System.out.println(reservation1);
 
         System.out.println("*******");
         var doc_lis = new ArrayList<Doctor>();
@@ -70,5 +71,41 @@ public class Prova {
         for(String st : array1){
             System.out.println(st);
         }
+
+        String data= "";
+        int giorno = 19;
+        String giorno_str = String.valueOf(giorno);
+        int mese = 11;
+        String mese_str = String.valueOf(mese);
+        data = (giorno_str + "/" + mese);
+        System.out.println(data);
+
+        double random = Math.random();
+        int day;
+        day = (int) ((random * 28)+1);
+        System.out.println(day);
+
+        int month = 0;
+        boolean control = false;
+        int numero = 1;
+        while(control == false){
+            System.out.println("Select a Month (Indicate the corresponding number, example: 1 is January");
+            if(numero> 0 && numero<13){
+                month = numero;
+                control = true;
+            }
+        }
+        System.out.println("Sono fuori");
+
+         */
+
+        HashMap<String, Doctor> map = new HashMap<>();
+        Doctor d1 = new Doctor("Mario", "Rossi", "Cardiologist");
+        Doctor d2 = new Doctor("Luigi", "Bianchi", "Orthopedic");
+        map.put("FPJVPIERVNPIE", d1);
+        map.put("FPJVPIERVNPIy", d2);
+        System.out.println(map);
+
+
     }
 }

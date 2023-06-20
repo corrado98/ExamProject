@@ -74,13 +74,25 @@ public class Client {
                             System.out.println(i+") "+d);
                             i=i+1;
                         }
-                        System.out.println("Insert the number corresponding to the doctor");
+                        System.out.println("Insert the number corresponding to the doctor: ");
                         var number = Integer.parseInt(input.nextLine());
                         var doc = doc_lis.get(number - 1);
                         //var doctor = (String) doc;
                         var doc_name = doc.getName();
                         var doc_surname = doc.getSurname();
                         var doc_spec = doc.getSpecializzazione();
+
+
+                        boolean control = false;
+                        int month = 0;
+                        while(control == false){
+                            System.out.println("Select a Month (Indicate the corresponding number, example: 1 is January)");
+                            int m = Integer.parseInt(input.nextLine()) ;
+                            if( m> 0 && m<13){
+                                month = m;
+                                control = true;
+                            }
+                        }
 
                         pw.println("CMD_ADD_PERSON");
                         pw.flush();
@@ -98,10 +110,32 @@ public class Client {
                         pw.flush();
                         pw.println(doc_spec);
                         pw.flush();
+                        pw.println(month);
+                        pw.flush();
                         pw.println("END_CMD");
                         pw.flush();
                         break;
 
+                    case "b":
+
+                        boolean control2= false;
+                        var f_code = "";
+                        while(control2 == false) {
+                            System.out.println(" Insert your Fiscal Code: ");
+                            f_code = input.nextLine();
+                            if (f_code.length() != 16) {
+                                System.err.println("Fiscal Code must have 16 characters ");
+                            }else{
+                                control2 = true;
+                            }
+                        }
+                        pw.println("CMD_REMOVE");
+                        pw.flush();
+                        pw.println(f_code);
+                        pw.flush();
+                        pw.println("END_CMD");
+                        pw.flush();
+                        break;
                 }
 
             }
