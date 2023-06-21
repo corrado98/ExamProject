@@ -14,7 +14,7 @@ public class ClientManager implements Runnable{
         this.my_server = server;
     }
 
-    public void execute(){
+    public void execute() {
 
         Scanner sc = null;
         try {
@@ -30,64 +30,78 @@ public class ClientManager implements Runnable{
         }
         String received_command = "";
 
-        while(!received_command.equals("CMD_QUIT")){
-            received_command = sc.nextLine();
-            System.out.println("Received command "+ received_command);
-            switch (received_command){
-                case "CMD_ADD_PERSON":
-                    var name = sc.nextLine();
-                    var surname = sc.nextLine();
-                    var age = sc.nextLine();
-                    var FC = sc.nextLine();
-                    var doctor_name = sc.nextLine();
-                    var doctor_surname = sc.nextLine();
-                    var doctor_spec  = sc.nextLine();
-                    var month = Integer.parseInt(sc.nextLine());
-                    var end_cmd= sc.nextLine();
 
-                    if(!end_cmd.equals("END_CMD")){
-                        System.err.println("Format Error !");
-                    }
+            while (!received_command.equals("CMD_QUIT")) {
+                received_command = sc.nextLine();
+                System.out.println("Received command " + received_command);
+                switch (received_command) {
+                    case "CMD_ADD_PERSON":
+                        var name = sc.nextLine();
+                        var surname = sc.nextLine();
+                        var age = sc.nextLine();
+                        var FC = sc.nextLine();
+                        var doctor_name = sc.nextLine();
+                        var doctor_surname = sc.nextLine();
+                        var doctor_spec = sc.nextLine();
+                        var month = Integer.parseInt(sc.nextLine());
+                        var end_cmd = sc.nextLine();
 
-                    System.out.println("Adding patient... "+name + " "+ surname+ " "+ age + " "+ FC );
-                    var patient = new Patient(name, surname, Integer.parseInt(age));
-                    try {
-                        patient.setFiscalCode(FC);
-                    } catch (Exception e) {
-                        System.err.println(e.getMessage());
-                    }
+                        if (!end_cmd.equals("END_CMD")) {
+                            System.err.println("Format Error !");
+                        }
 
-                    Doctor d = new Doctor(doctor_name, doctor_surname, doctor_spec);
+                        System.out.println("Adding patient... " + name + " " + surname + " " + age + " " + FC);
+                        var patient = new Patient(name, surname, Integer.parseInt(age));
+                        try {
+                            patient.setFiscalCode(FC);
+                        } catch (Exception e) {
+                            System.err.println(e.getMessage());
+                        }
 
-                    int r = getReservation(month);// Salviamo giorno
-                    String day = r + "/"+ month;
-                    String h = getHour();
-                    System.out.println("Adding Reservation... "+name + " "+ surname+ ", "+ d + ", day: "+day+", hour: "+h );
-                    Reservation res = new Reservation(patient, d, day, h);
-                    my_server.commandAddReservation(patient.getFiscalCode(), res);
-                    //my_server.commandSaveMap();
-                    System.out.println(" ***** MAPPA *****");
-                    my_server.readMap();
-                    break;
-                case "CMD_QUIT":
-                    System.out.println("Closing connection ");
-                    break;
+                        Doctor d = new Doctor(doctor_name, doctor_surname, doctor_spec);
 
-                case "CMD_REMOVE":
+                        int r = getReservation(month);// Salviamo giorno
+                        String day = r + "/" + month;
+                        String h = getHour();
+                        System.out.println("Adding Reservation... " + name + " " + surname + ", " + d + ", day: " + day + ", hour: " + h);
+                        Reservation res = new Reservation(patient, d, day, h);
+                        this.my_server.commandAddReservation(patient.getFiscalCode(), res, pw);
+                        //my_server.commandSaveMap();
+                        System.out.println(" ***** MAPPA *****");
+                        this.my_server.readMap();
+                        break;
+                    case "CMD_QUIT":
+                        System.out.println("Closing connection ");
+                        break;
 
-                    var f_code = sc.nextLine();
-                    var end= sc.nextLine();
+                    case "CMD_REMOVE":
 
-                    if(!end.equals("END_CMD")){
-                        System.err.println("Format Error !");
-                    }
+                        var f_code = sc.nextLine();
+                        var end = sc.nextLine();
 
-                    System.out.println("Removing Reservation ");
-                    my_server.commandRemoveReservation(f_code);
+                        if (!end.equals("END_CMD")) {
+                            System.err.println("Format Error !");
+                        }
+
+                        System.out.println("Removing Reservation ");
+                        this.my_server.commandRemoveReservation(f_code, pw);
+                        break;
+
+                    case "CMD_GET":
+                        var f_code2 = sc.nextLine();
+                        var end2 = sc.nextLine();
+
+                        if (!end2.equals("END_CMD")) {
+                            System.err.println("Format Error !");
+                        }
+                        System.out.println("Getting your Reservation ");
+                        this.my_server.commandGetReservation(pw, f_code2);
+                        break;
+                }
+
             }
-
         }
-    }
+
 
     private String getHour() {
         double random_h = Math.random();
@@ -118,6 +132,6 @@ public class ClientManager implements Runnable{
     @Override
     public void run() {
         System.out.println("  [STARTING THE THREAD]  ");
-        execute();
+        this.execute();
     }
 }

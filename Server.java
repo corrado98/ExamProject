@@ -7,8 +7,7 @@ public class Server {
     private HashMap<String, Reservation> map = new HashMap<>();
     HashMap<String, Reservation> copy_map = new HashMap<>();
     //private HashMap<String, Reservation> map = new HashMap<>();
-//definire command save list
-
+    String st = "";
 
     public synchronized void commandSaveMap(){
         FileOutputStream fos = null;
@@ -29,6 +28,11 @@ public class Server {
 
     }
 
+    public synchronized void response(PrintWriter pw , String st){
+
+        pw.println("[SERVER]: "+ st);
+        pw.flush();
+    }
     public synchronized void readMap(){
         //map = commandLoadMap();
         for(String r : map.keySet()){
@@ -60,39 +64,68 @@ public class Server {
         return visit_control;
     }
 
-    public synchronized void commandAddReservation(String s, Reservation r){
+    public synchronized void commandAddReservation(String s, Reservation r, PrintWriter pw){
         commandLoadMap();
         if(control_visit(r)) {
             if (map.get(s) != null) {
                 System.err.println("Reservation already present !");
                 System.err.println("Please remove your precedent reservation");
+                st = "Reservation already present, please remove your precedent reservation ..";
+                response(pw, st);
+                st= "";
             } else {
                 //System.out.println("Mappa di prima : ------> " + map);
                 map.put(s, r);
                 //System.out.println("Mappa  dopo : --------> " + map);
                 //System.out.println("Sto per salvare la mappa");
                 commandSaveMap();
-                System.out.println(map);
+                st =  r+ " added";
+                response(pw, st);
+                st = "";
+                //System.out.println(map);
 
             }
         }else{
             System.out.println("Please Retry... ");
         }
     }
-    public synchronized void commandRemoveReservation(String s){
+    public synchronized void commandRemoveReservation(String s, PrintWriter pw){
         commandLoadMap();
         if(map.get(s)==null){
             System.err.println(" This reservation doesn't exist.. Please retry");
+            st = " This reservation doesn't exist.. Please retry ";
+            response(pw, st);
+            st= "";
         }else {
             System.out.println("Mappa prima: ");
             readMap();
             map.remove(s);
             System.out.println("Mappa DOPO CANCELLAZIONE: ");
             readMap();
+            commandSaveMap();
+            st = " Reservation removed ";
+            response(pw, st);
+            st= "";
+
         }
     }
 
-    public synchronized void commandGetReservation(String s){map.get(s);}
+    public synchronized void commandGetReservation(PrintWriter pw, String s){
+        commandLoadMap();
+        if(map.get(s)==null){
+            System.err.println(" This reservation doesn't exist.. Please retry");
+            st = " This reservation doesn't exist.. Please retry ";
+            response(pw, st);
+            st= "";
+        }else{
+            Reservation r =map.get(s);
+            System.out.println("Your reservation is "+ r);
+            st = "Your reservation is "+ r;
+            response(pw, st);
+            st= "";
+        }
+
+    }
     public static void main(String[] args) {
         var my_server = new Server();
 

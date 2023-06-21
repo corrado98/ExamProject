@@ -47,11 +47,13 @@ public class Client {
 
             while(!choice.equals("q")){
                 System.out.println("****************************************");
+                System.out.println("WELCOME TO POLYCLINIC ANFUCAIA");
                 System.out.println("Select one of the following choices: ");
                 System.out.println("");
                 System.out.println(" a : Book a visit ");
-                System.out.println(" b : Cancel your visit ");
-                System.out.println(" c : Our contacts ");
+                System.out.println(" b : Cancel your reservation ");
+                System.out.println(" c : Get my reservation ");
+                System.out.println(" d : Our Contacts");
                 System.out.println(" q : quit ");
                 System.out.println("****************************************");
                 System.out.print(" Enter choice: ");
@@ -114,6 +116,7 @@ public class Client {
                         pw.flush();
                         pw.println("END_CMD");
                         pw.flush();
+                        System.out.println(scanner.nextLine());
                         break;
 
                     case "b":
@@ -135,7 +138,36 @@ public class Client {
                         pw.flush();
                         pw.println("END_CMD");
                         pw.flush();
+                        System.out.println(scanner.nextLine());
                         break;
+
+                    case "c":
+                        boolean control3= false;
+                        var f_code2 = "";
+                        while(control3 == false) {
+                            System.out.println(" Insert your Fiscal Code: ");
+                            f_code2 = input.nextLine();
+                            if (f_code2.length() != 16) {
+                                System.err.println("Fiscal Code must have 16 characters ");
+                            }else{
+                                control3 = true;
+                            }
+                        }
+                        pw.println("CMD_GET");
+                        pw.flush();
+                        pw.println(f_code2);
+                        pw.flush();
+                        pw.println("END_CMD");
+                        pw.flush();
+                        System.out.println(scanner.nextLine());
+                        break;
+
+                    case "d":
+                        System.out.println(" Address: Street White Mount 9");
+                        System.out.println(" e-mail: anfucaia@gmail.com");
+                        System.out.println(" Telephone number: +39 0931456789");
+
+
                 }
 
             }
