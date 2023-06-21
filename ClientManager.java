@@ -97,6 +97,11 @@ public class ClientManager implements Runnable{
                         System.out.println("Getting your Reservation ");
                         this.my_server.commandGetReservation(pw, f_code2);
                         break;
+
+                    default:
+                        if (!received_command.isBlank()) {
+                            System.out.println("Unknown command");
+                        }
                 }
 
             }
