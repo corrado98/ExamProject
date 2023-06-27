@@ -78,6 +78,7 @@ public class Server {
                 map.put(s, r);
                 //System.out.println("Mappa  dopo : --------> " + map);
                 //System.out.println("Sto per salvare la mappa");
+                //System.out.println("Qua ci arrivo");
                 commandSaveMap();
                 st =  r+ " added";
                 response(pw, st);
