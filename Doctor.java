@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 public class Doctor extends Person {
 
-    //CREARE PRENOTAZIONI -> FARE COLLABORARE MEDICO CON CLIENTE
+    //CREARE PRENOTAZIONI -> COLLABORARE MEDICO CON CLIENTE
     private String specializzazione;
     //private String orario;
     //private int day;
