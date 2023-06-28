@@ -100,11 +100,24 @@ public class Prova {
          */
 
         HashMap<String, Doctor> map = new HashMap<>();
-        Doctor d1 = new Doctor("Mario", "Rossi", "Cardiologist");
-        Doctor d2 = new Doctor("Luigi", "Bianchi", "Orthopedic");
-        map.put("FPJVPIERVNPIE", d1);
-        map.put("FPJVPIERVNPIy", d2);
+        //Doctor d1 = new Doctor("Mario", "Rossi", "Cardiologist");
+        //Doctor d2 = new Doctor("Luigi", "Bianchi", "Orthopedic");
+        //map.put("FPJVPIERVNPIE", d1);
+        //map.put("FPJVPIERVNPIy", d2);
         System.out.println(map);
+
+        ArrayList<Integer> prova = new ArrayList();
+        //String s1 = 1;
+        //String s2 = 2;
+        //prova.add(s1);
+        //prova.add(s2);
+        int int1 = 1;
+        int int2 = 2;
+        prova.add(int1);
+        prova.add(int2);
+        System.out.println(prova.get(0));
+
+        //System.out.println(prova.);
 
 
     }

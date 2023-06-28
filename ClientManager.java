@@ -35,7 +35,46 @@ public class ClientManager implements Runnable{
                 received_command = sc.nextLine();
                 System.out.println("Received command " + received_command);
                 switch (received_command) {
+                    case "CMD_ADD_DOCTOR":
+                        var d_name = sc.nextLine();
+                        var d_surname = sc.nextLine();
+                        var d_spec = sc.nextLine();
+                        var d_FC = sc.nextLine();
+                        var d_day = Integer.parseInt(sc.nextLine());
+                        var d_hour = sc.nextLine();
+                        //var d_end = Integer.parseInt(sc.nextLine());
+                        var d_end_cmd = sc.nextLine();
+
+
+                        if (!d_end_cmd.equals("END_CMD")) {
+                            System.err.println("Format Error !");
+                        }
+
+                        Doctor d = new Doctor(d_name, d_surname, d_spec, d_FC);
+                        //d.setDay(d_day);
+                        //d.setOrario(d_hour);
+                        Appointment a = new Appointment(d_day, d_hour);
+                        d.setApp_arr(a);
+                        this.my_server.commandAddDoctor(d.getFC(), d, pw);
+                        break;
+
+                    case "CMD_ADD_VISIT":
+
+                        var d_fc = sc.nextLine();
+                        var d_day2 =Integer.parseInt(sc.nextLine());
+                        var d_hour2 = sc.nextLine();
+                        var d_end_cmd2 = sc.nextLine();
+
+                        if (!d_end_cmd2.equals("END_CMD")) {
+                            System.err.println("Format Error !");
+                        }
+
+                        this.my_server.addappointment(d_fc, d_day2,d_hour2, pw);
+                        break;
+
+
                     case "CMD_ADD_PERSON":
+                        /*
                         var name = sc.nextLine();
                         var surname = sc.nextLine();
                         var age = sc.nextLine();
@@ -68,11 +107,32 @@ public class ClientManager implements Runnable{
                         this.my_server.commandAddReservation(patient.getFiscalCode(), res, pw);
                         //my_server.commandSaveMap();
                         System.out.println(" ***** MAPPA *****");
-                        this.my_server.readMap();
+                        this.my_server.readMap();*/
+                        break;
+
+                    case "CMD_REMOVE_DOCTOR":
+                        var d_fc2 = sc.nextLine();
+                        var end_c = sc.nextLine();
+                        if (!end_c.equals("END_CMD")) {
+                            System.err.println("Format Error !");
+                        }
+                        System.out.println("Removing doctor "+ d_fc2);
+                        this.my_server.remove_doc(d_fc2, pw);
+
+                        break;
+
+                    case "CMD_GET_DOCTOR":
+                        var D_fc2 = sc.nextLine();
+                        var End_c = sc.nextLine();
+                        if (!End_c.equals("END_CMD")) {
+                            System.err.println("Format Error !");
+                        }
+                        this.my_server.get_doc(D_fc2, pw);
                         break;
                     case "CMD_QUIT":
                         System.out.println("Closing connection ");
                         break;
+
 
                     case "CMD_REMOVE":
 

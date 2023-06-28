@@ -1,23 +1,26 @@
+import jdk.jshell.execution.LoaderDelegate;
+
 import java.io.*;
 import java.net.ServerSocket;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Server {
 
     private HashMap<String, Reservation> map = new HashMap<>();
-    HashMap<String, Reservation> copy_map = new HashMap<>();
-    //private HashMap<String, Reservation> map = new HashMap<>();
+    private HashMap<String, Doctor> doc_map = new HashMap<>();
+    private HashMap<String, Doctor> copy_map = new HashMap<>();
     String st = "";
 
-    public synchronized void commandSaveMap(){
+
+    public synchronized void commandSaveMapDoc(String s){
         FileOutputStream fos = null;
         ObjectOutputStream oos = null;
-        //copy_map = map;
         try {
-            fos = new FileOutputStream("Reservation.txt");
+            fos = new FileOutputStream(s);
             oos = new ObjectOutputStream(fos);
-            oos.writeObject(map);
-            System.out.println("Saving map...");
+            oos.writeObject(doc_map);
+            System.out.println("Saving Doctors map...");
             oos.close();
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
@@ -27,6 +30,75 @@ public class Server {
         }
 
     }
+
+    public synchronized void response2(PrintWriter pw , ArrayList<Appointment> a){
+
+        pw.println("[SERVER]: "+ a);
+        pw.flush();
+    }
+    public synchronized void getApp(PrintWriter pw, String s){
+        commandLoadMapDoc("Doctormap.txt");
+        if(doc_map.get(s)==null){
+            response(pw, "Doctor not present");
+        }else{
+            response2(pw, doc_map.get(s).getApp_arr());
+        }
+
+
+    }
+
+
+    public synchronized void remove_doc(String d_fc2, PrintWriter pw){
+        commandLoadMapDoc("Doctormap.txt");
+        if(doc_map.get(d_fc2)==null){
+            response(pw, "Doctor not present");
+        }else{
+            doc_map.remove(d_fc2);
+            commandSaveMapDoc("Doctormap.txt");
+            response(pw, "Doctor removed");
+            System.out.println(doc_map);
+            //System.out.println("Appuntamenti dopo: ");
+            //System.out.println(doc_map.get(d_fc2).getApp_arr());
+        }
+
+
+    }
+
+    public void get_doc(String dFc2, PrintWriter pw) {
+
+        commandLoadMapDoc("Doctormap.txt");
+        if(doc_map.get(dFc2)==null){
+            response(pw, "Doctor not present");
+        }else{
+            response2(pw, doc_map.get(dFc2).getApp_arr());
+        }
+    }
+    public synchronized void addappointment(String d_fc, int d_day2, String d_hour, PrintWriter pw ){
+        commandLoadMapDoc("Doctormap.txt");
+        copy_map = doc_map;
+        if(copy_map.get(d_fc)!= null){
+
+            System.out.println("doc_map_iniziale: "+ copy_map);
+            Appointment a = new Appointment(d_day2, d_hour);
+            copy_map.get(d_fc).setApp_arr(a);
+            //commandSaveMapDoc("copymap.txt");
+            //commandSaveCopyMapDoc("copymap.txt");
+            doc_map=copy_map;
+            commandSaveMapDoc("Doctormap.txt");
+            System.out.println("doc_map_finale: "+ doc_map);
+            System.out.println("Appuntamenti di "+ doc_map.get(d_fc).getApp_arr());
+            st="Appointment added: "+a;
+            response(pw,st);
+            st="";
+        }else{
+            System.out.println("Doctor not present");
+            response(pw, "Doctor not present");
+            st="";
+        }
+
+    }
+
+
 
     public synchronized void response(PrintWriter pw , String st){
 
@@ -39,21 +111,47 @@ public class Server {
             System.out.println(map.get(r));
         }
     }
-    public synchronized void commandLoadMap(){
+    public synchronized void commandLoadMap(String s){
         FileInputStream fis= null;
         ObjectInputStream ois= null;
         try {
-            fis = new FileInputStream("Reservation.txt");
+            fis = new FileInputStream(s);
             ois = new ObjectInputStream(fis);
             map = (HashMap<String, Reservation>) ois.readObject();
             ois.close();
-            //return copy_map;
         } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
 
+    public synchronized void commandLoadMapDoc(String s){
+        FileInputStream fis= null;
+        ObjectInputStream ois= null;
+        try {
+            fis = new FileInputStream(s);
+            ois = new ObjectInputStream(fis);
+            doc_map = (HashMap<String, Doctor>) ois.readObject();
+            ois.close();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 
+
+    public synchronized void commandAddDoctor(String s, Doctor d, PrintWriter pw){
+        commandLoadMapDoc("Doctormap.txt");
+        System.out.println("La mappa iniziale è :");
+        doc_map.put(s,d);
+        commandSaveMapDoc("Doctormap.txt");
+        //copy_map=doc_map;
+        //commandSaveCopyMapDoc("copymap.txt");
+        System.out.println("Mappa dei medici modificata");
+        System.out.println(doc_map);
+        st =  d+ " added";
+        response(pw, st);
+        st = "";
+
+    }
     public synchronized boolean control_visit( Reservation r){
     boolean visit_control = true;
         for(String str : map.keySet()){
@@ -64,8 +162,10 @@ public class Server {
         return visit_control;
     }
 
+
+
     public synchronized void commandAddReservation(String s, Reservation r, PrintWriter pw){
-        commandLoadMap();
+        commandLoadMap("Reservation.txt");
         if(control_visit(r)) {
             if (map.get(s) != null) {
                 System.err.println("Reservation already present !");
@@ -73,25 +173,26 @@ public class Server {
                 st = "Reservation already present, please remove your precedent reservation ..";
                 response(pw, st);
                 st= "";
+
             } else {
                 //System.out.println("Mappa di prima : ------> " + map);
                 map.put(s, r);
                 //System.out.println("Mappa  dopo : --------> " + map);
                 //System.out.println("Sto per salvare la mappa");
                 //System.out.println("Qua ci arrivo");
-                commandSaveMap();
+               // commandSaveMap();
                 st =  r+ " added";
                 response(pw, st);
                 st = "";
                 //System.out.println(map);
-
             }
+
         }else{
             System.out.println("Please Retry... ");
         }
     }
     public synchronized void commandRemoveReservation(String s, PrintWriter pw){
-        commandLoadMap();
+        commandLoadMap("Reservation.txt");
         if(map.get(s)==null){
             System.err.println(" This reservation doesn't exist.. Please retry");
             st = " This reservation doesn't exist.. Please retry ";
@@ -103,7 +204,7 @@ public class Server {
             map.remove(s);
             System.out.println("Mappa DOPO CANCELLAZIONE: ");
             readMap();
-            commandSaveMap();
+            //commandSaveMap();
             st = " Reservation removed ";
             response(pw, st);
             st= "";
@@ -112,7 +213,7 @@ public class Server {
     }
 
     public synchronized void commandGetReservation(PrintWriter pw, String s){
-        commandLoadMap();
+        commandLoadMap("Reservation.txt");
         if(map.get(s)==null){
             System.err.println(" This reservation doesn't exist.. Please retry");
             st = " This reservation doesn't exist.. Please retry ";
@@ -147,4 +248,5 @@ public class Server {
             System.exit(-1);
         }
     }
+
 }
