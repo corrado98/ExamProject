@@ -38,6 +38,10 @@ public class Doctor extends Person {
         this.FC = FC;
     }
 
+    public String getSpecializzazione() {
+        return specializzazione;
+    }
+
     @Override
     public String toString() {
         return "Doctor{" + this.getName()+" "+ this.getSurname()+

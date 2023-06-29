@@ -45,6 +45,7 @@ public class Client {
 
             if(choice.equals("a")) {
                 while(!choice.equals("5")) {
+                    System.out.println("***** DOCTOR'S PAGE *****");
                     System.out.println(" 1) Work with us");
                     System.out.println(" 2) Add your day visit");
                     System.out.println(" 3) Remove yourself");
@@ -63,32 +64,36 @@ public class Client {
                             var doc_spec = input.nextLine();
                             System.out.print("Fiscal Code: ");
                             var doc_FC = input.nextLine();
-                            System.out.print("Day of your visit (1: sunday, 2: monday, 3: tuesday, 4: wednesday, 5: thursday, 6: friday, 7: saturday): ");
-                            var doc_day_visit = input.nextLine();
-                            System.out.print("Select an hour range (ex. start-end): ");
-                            String doc_hour = input.nextLine();
-                            pw.println("CMD_ADD_DOCTOR");
-                            pw.flush();
-                            pw.println(doc_name);
-                            pw.flush();
-                            pw.println(doc_surname);
-                            pw.flush();
-                            pw.println(doc_spec);
-                            pw.flush();
-                            pw.println(doc_FC);
-                            pw.flush();
-                            pw.println(doc_day_visit);
-                            pw.flush();
-                            pw.println(doc_hour);
-                            pw.flush();
-                            pw.println("END_CMD");
-                            pw.flush();
-                            System.out.println(scanner.nextLine());
+                            if(doc_FC.length() != 16){
+                                System.out.println("Retry! Fiscal Code must have 16 characters");
+                            }else {
+                                System.out.print("Day of your visit (7: sunday, 1: monday, 2: tuesday, 3: wednesday, 4: thursday, 5: friday, 6: saturday): ");
+                                var doc_day_visit = input.nextLine();
+                                System.out.print("Select an hour range (ex. start-end): ");
+                                String doc_hour = input.nextLine();
+                                pw.println("CMD_ADD_DOCTOR");
+                                pw.flush();
+                                pw.println(doc_name);
+                                pw.flush();
+                                pw.println(doc_surname);
+                                pw.flush();
+                                pw.println(doc_spec);
+                                pw.flush();
+                                pw.println(doc_FC);
+                                pw.flush();
+                                pw.println(doc_day_visit);
+                                pw.flush();
+                                pw.println(doc_hour);
+                                pw.flush();
+                                pw.println("END_CMD");
+                                pw.flush();
+                                System.out.println(scanner.nextLine());
+                            }
                             break;
                         case "2":
                             System.out.print("Insert your Fiscal Code: ");
                             var f_doc_code = input.nextLine();
-                            System.out.print("Day of your visit (1: sunday, 2: monday, 3: tuesday, etc..):  ");
+                            System.out.print("Day of your visit (7: sunday, 1: monday, 2: tuesday, etc..):  ");
                             var doc_day_visit2 = input.nextLine();
                             System.out.print("Select an hour range (ex. start-end): ");
                             String doc_hour_2 = input.nextLine();
@@ -119,7 +124,7 @@ public class Client {
                             pw.println("END_CMD");
                             pw.flush();
                             System.out.println(scanner.nextLine());
-
+                            break;
                         case "4":
                             System.out.print("Insert your Fiscal Code:  ");
                             var f_doc_code3 = input.nextLine();
@@ -130,7 +135,7 @@ public class Client {
                             pw.println("END_CMD");
                             pw.flush();
                             System.out.println(scanner.nextLine());
-
+                            break;
 
 
 
@@ -146,13 +151,14 @@ public class Client {
             }else if(choice.equals("b")){
                 while(!choice.equals("q")){
                     System.out.println("****************************************");
-                    System.out.println("WELCOME TO POLYCLINIC ANFUCAIA");
+                    System.out.println("**** PATIENT'S PAGE ****");
                     System.out.println("Select one of the following choices: ");
                     System.out.println("");
-                    System.out.println(" a : Book a visit ");
-                    System.out.println(" b : Cancel your reservation ");
-                    System.out.println(" c : Get my reservation ");
-                    System.out.println(" d : Our Contacts");
+                    System.out.println(" a : Sign in ");
+                    System.out.println(" b : Book a visit ");
+                    System.out.println(" c : Cancel yourself ");
+                    System.out.println(" d : Get my reservation ");
+                    System.out.println(" e : Our Contacts");
                     System.out.println(" q : quit ");
                     System.out.println("****************************************");
                     System.out.print(" Enter choice: ");
@@ -160,6 +166,113 @@ public class Client {
 
                     switch (choice){
                         case "a":
+                            System.out.println(" Insert your name: ");
+                            var name = input.nextLine();
+                            System.out.println(" Insert your surname: ");
+                            var surname = input.nextLine();
+                            System.out.println(" Insert your age: ");
+                            var age = input.nextLine();
+                            System.out.println(" Insert your Fiscal Code: ");
+                            var FC = input.nextLine();
+
+                            pw.println("CMD_ADD_PATIENT");
+                            pw.flush();
+                            pw.println(name);
+                            pw.flush();
+                            pw.println(surname);
+                            pw.flush();
+                            pw.println(age);
+                            pw.flush();
+                            pw.println(FC);
+                            pw.flush();
+                            pw.println("END_CMD");
+                            pw.flush();
+                            System.out.println(scanner.nextLine());
+
+                            /*
+                            if(ris.equals("Person not present! Please Sign in")){
+                                System.out.println(ris);
+                                break;
+                            }else {
+                                System.out.println(ris); //qui stampa lista medici
+                                System.out.print(" Please insert the Fiscal Code of the doctor :");
+                                var f_cd = input.nextLine();
+                                pw.println("CMD_GIVE_APPOINTMENTS");
+                                pw.flush();
+                                pw.println(f_cd);
+                                pw.flush();
+                                pw.println("END_CMD");
+                                pw.flush();
+                                System.out.println(scanner.nextLine()); //qui ricevo i possibili appuntamenti
+*/
+
+                                break;
+
+
+                        case "b":
+
+                            System.out.println(" Insert your Fiscal Code: ");
+                            var FC2 = input.nextLine();
+
+                            pw.println("CMD_ADD_RESERVATION");
+                            pw.flush();
+                            pw.println(FC2);
+                            pw.flush();
+                            pw.println("END_CMD");
+                            pw.flush();
+                            String ris = scanner.nextLine();
+
+                            //System.out.println("Choose one of these doctors: ");
+
+                            if(ris.equals("Person not present! Please Sign in")){
+                                System.out.println(ris);
+                                break;
+                            }else {
+                                System.out.println(ris); //qui stampa lista medici
+                                System.out.print(" Please insert the Fiscal Code of the doctor :");
+                                var f_cd = input.nextLine();
+                                pw.println("CMD_GIVE_APPOINTMENTS");
+                                pw.flush();
+                                pw.println(f_cd);
+                                pw.flush();
+                                pw.println("END_CMD");
+                                pw.flush();
+                                String proposed = scanner.nextLine();
+                                String hour = scanner.nextLine();
+                                System.out.print("[SERVER]: Date proposed: ");
+                                System.out.println(proposed);
+                                System.out.print("[SERVER]: Hour proposed: " );
+                                System.out.println(hour);
+                                System.out.print(" Do you want to accept this reservation? [Y/N]: " );
+                                var ch = input.nextLine();
+                                if(ch.equals("Y")){
+                                    pw.println("CMD_CREATE_VISIT");
+                                    pw.flush();
+                                    pw.println(proposed);
+                                    pw.flush();
+                                    pw.println(hour);
+                                    pw.flush();
+                                    pw.println(f_cd);
+                                    pw.flush();
+                                    pw.println(FC2);
+                                    pw.flush();
+                                    pw.println("END_CMD");
+                                    pw.flush();
+
+                                    System.out.println(scanner.nextLine());
+                                    break;
+
+
+                                }else{
+
+                                    break;
+
+                                }
+
+
+                            }
+
+
                             /*
                             System.out.println(" Insert your name: ");
                             var name = input.nextLine();
@@ -219,8 +332,8 @@ public class Client {
                             System.out.println(scanner.nextLine());
                             break;
 */
-                        case "b":
-
+                        case "c":
+/*
                             boolean control2= false;
                             var f_code = "";
                             while(control2 == false) {
@@ -241,7 +354,7 @@ public class Client {
                             System.out.println(scanner.nextLine());
                             break;
 
-                        case "c":
+                        case "d":
                             boolean control3= false;
                             var f_code2 = "";
                             while(control3 == false) {
@@ -260,9 +373,11 @@ public class Client {
                             pw.println("END_CMD");
                             pw.flush();
                             System.out.println(scanner.nextLine());
+
+ */
                             break;
 
-                        case "d":
+                        case "e":
                             System.out.println(" Address: Street White Mount 9");
                             System.out.println(" e-mail: anfucaia@gmail.com");
                             System.out.println(" Telephone number: +39 0931456789");

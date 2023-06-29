@@ -72,13 +72,59 @@ public class ClientManager implements Runnable{
                         this.my_server.addappointment(d_fc, d_day2,d_hour2, pw);
                         break;
 
+                    case "CMD_GIVE_APPOINTMENTS":
+                        var dfc2 = sc.nextLine();
+                        var d_end_cmd3 = sc.nextLine();
 
-                    case "CMD_ADD_PERSON":
-                        /*
+                        if (!d_end_cmd3.equals("END_CMD")) {
+                            System.err.println("Format Error !");
+                        }
+
+                        this.my_server.giveappointments(dfc2, pw);
+                        break;
+
+                    case "CMD_CREATE_VISIT":
+                        var date = sc.nextLine();
+                        var hour = sc.nextLine();
+                        var d_cf = sc.nextLine();
+                        var c_cf = sc.nextLine(); //cod fis cliente
+                        var en = sc.nextLine();
+
+                        if(!en.equals("END_CMD")){
+                            System.err.println("Format Error !");
+                        }
+
+                        this.my_server.createvisit(pw, date, hour, d_cf, c_cf);
+                        break;
+
+
+
+                    case "CMD_ADD_PATIENT":
+
                         var name = sc.nextLine();
                         var surname = sc.nextLine();
-                        var age = sc.nextLine();
+                        var age = Integer.parseInt(sc.nextLine());
                         var FC = sc.nextLine();
+                        var p_end_cmd = sc.nextLine();
+
+                        if (!p_end_cmd.equals("END_CMD")) {
+                            System.err.println("Format Error !");
+                        }
+
+                        Patient p = new Patient(name, surname, age);
+                        try {
+                            p.setFiscalCode(FC);
+                        } catch (Exception e) {
+
+                            String str = e.getMessage();
+                            this.my_server.response(pw, str);
+                            break;
+                        }
+
+                        this.my_server.commandAddPatient(p.getFiscalCode(), p, pw);
+                        break;
+
+                        /*
                         var doctor_name = sc.nextLine();
                         var doctor_surname = sc.nextLine();
                         var doctor_spec = sc.nextLine();
@@ -108,8 +154,16 @@ public class ClientManager implements Runnable{
                         //my_server.commandSaveMap();
                         System.out.println(" ***** MAPPA *****");
                         this.my_server.readMap();*/
-                        break;
 
+                    case "CMD_ADD_RESERVATION":
+                        var p_fc = sc.nextLine();
+                        var endcmd = sc.nextLine();
+                        if (!endcmd.equals("END_CMD")) {
+                            System.err.println("Format Error !");
+                        }
+
+                        this.my_server.verify(p_fc,pw);
+                        break;
                     case "CMD_REMOVE_DOCTOR":
                         var d_fc2 = sc.nextLine();
                         var end_c = sc.nextLine();
@@ -144,7 +198,7 @@ public class ClientManager implements Runnable{
                         }
 
                         System.out.println("Removing Reservation ");
-                        this.my_server.commandRemoveReservation(f_code, pw);
+                        //this.my_server.commandRemoveReservation(f_code, pw);
                         break;
 
                     case "CMD_GET":
@@ -155,7 +209,7 @@ public class ClientManager implements Runnable{
                             System.err.println("Format Error !");
                         }
                         System.out.println("Getting your Reservation ");
-                        this.my_server.commandGetReservation(pw, f_code2);
+                        //this.my_server.commandGetReservation(pw, f_code2);
                         break;
 
                     default:
