@@ -8,15 +8,22 @@ public class Reservation implements Serializable {
     private String day;
 
     private String hour;
-    /*private String orario;
-    private Date giorno;*/
 
+    private boolean free = true;
 
     public Reservation(Patient p, Doctor m, String day, String hour) {
         this.p = p;
         this.m = m;
         this.day = day;
         this.hour = hour;
+    }
+
+    public boolean isFree() {
+        return free;
+    }
+
+    public void setFree(boolean free) {
+        this.free = free;
     }
 
     public Patient getP() {

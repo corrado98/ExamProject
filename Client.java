@@ -3,6 +3,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -141,10 +142,7 @@ public class Client {
 
 
 
-                        default:
-                            if (!choice.isBlank()) {
-                                System.out.println("Unknown command");
-                            }
+                        
                     }
                 }
 
@@ -189,24 +187,7 @@ public class Client {
                             pw.flush();
                             System.out.println(scanner.nextLine());
 
-                            /*
-                            if(ris.equals("Person not present! Please Sign in")){
-                                System.out.println(ris);
-                                break;
-                            }else {
-                                System.out.println(ris); //qui stampa lista medici
-                                System.out.print(" Please insert the Fiscal Code of the doctor :");
-                                var f_cd = input.nextLine();
-                                pw.println("CMD_GIVE_APPOINTMENTS");
-                                pw.flush();
-                                pw.println(f_cd);
-                                pw.flush();
-                                pw.println("END_CMD");
-                                pw.flush();
-                                System.out.println(scanner.nextLine()); //qui ricevo i possibili appuntamenti
-*/
-
-                                break;
+                            break;
 
 
                         case "b":
@@ -222,22 +203,26 @@ public class Client {
                             pw.flush();
                             String ris = scanner.nextLine();
 
-                            //System.out.println("Choose one of these doctors: ");
 
-                            if(ris.equals("Person not present! Please Sign in")){
+
+                            if(ris.equals("[SERVER]: Person not present! Please Sign in")){
                                 System.out.println(ris);
                                 break;
                             }else {
                                 System.out.println(ris); //qui stampa lista medici
                                 System.out.print(" Please insert the Fiscal Code of the doctor :");
                                 var f_cd = input.nextLine();
+                                LocalDate start = LocalDate.now();
                                 pw.println("CMD_GIVE_APPOINTMENTS");
                                 pw.flush();
                                 pw.println(f_cd);
                                 pw.flush();
+                                pw.println(start);
+                                pw.flush();
                                 pw.println("END_CMD");
                                 pw.flush();
-                                String proposed = scanner.nextLine();
+
+                                LocalDate proposed = LocalDate.parse(scanner.nextLine());
                                 String hour = scanner.nextLine();
                                 System.out.print("[SERVER]: Date proposed: ");
                                 System.out.println(proposed);
@@ -245,7 +230,28 @@ public class Client {
                                 System.out.println(hour);
                                 System.out.print(" Do you want to accept this reservation? [Y/N]: " );
                                 var ch = input.nextLine();
-                                if(ch.equals("Y")){
+                                while (!ch.equals("Y")){
+                                    //proponi visite
+                                    proposed = proposed.plusDays(1);
+                                    pw.println("CMD_GIVE_APPOINTMENTS");
+                                    pw.flush();
+                                    pw.println(f_cd);
+                                    pw.flush();
+                                    pw.println(proposed);
+                                    pw.flush();
+                                    pw.println("END_CMD");
+                                    pw.flush();
+
+                                    proposed = LocalDate.parse(scanner.nextLine());
+                                    hour = scanner.nextLine();
+                                    System.out.print("[SERVER]: Date proposed: ");
+                                    System.out.println(proposed);
+                                    System.out.print("[SERVER]: Hour proposed: " );
+                                    System.out.println(hour);
+                                    System.out.print(" Do you want to accept this reservation? [Y/N]: " );
+                                    ch = input.nextLine();
+
+                                }
                                     pw.println("CMD_CREATE_VISIT");
                                     pw.flush();
                                     pw.println(proposed);
@@ -260,121 +266,38 @@ public class Client {
                                     pw.flush();
 
                                     System.out.println(scanner.nextLine());
-                                    break;
 
 
-                                }else{
 
                                     break;
-
-                                }
-
-
                             }
-
-
-                            /*
-                            System.out.println(" Insert your name: ");
-                            var name = input.nextLine();
-                            System.out.println(" Insert your surname: ");
-                            var surname = input.nextLine();
-                            System.out.println(" Insert your age: ");
-                            var age = input.nextLine();
-                            System.out.println(" Insert your Fiscal Code: ");
-                            var FC = input.nextLine();
-
-                            System.out.println("Select one of the following doctors: ");
-                            int i=1;
-                            for(String d:doc_map) {
-                                System.out.println(i+") "+d);
-                                i=i+1;
-                            }
-                            System.out.println("Insert the number corresponding to the doctor: ");
-                            var number = Integer.parseInt(input.nextLine());
-                            var doc = doc_lis.get(number - 1);
-                            //var doctor = (String) doc;
-                            var doc_name = doc.getName();
-                            var doc_surname = doc.getSurname();
-                            var doc_spec = doc.getSpecializzazione();
-
-
-                            boolean control = false;
-                            int month = 0;
-                            while(control == false){
-                                System.out.println("Select a Month (Indicate the corresponding number, example: 1 is January)");
-                                int m = Integer.parseInt(input.nextLine()) ;
-                                if( m> 0 && m<13){
-                                    month = m;
-                                    control = true;
-                                }
-                            }
-
-                            pw.println("CMD_ADD_PERSON");
-                            pw.flush();
-                            pw.println(name);
-                            pw.flush();
-                            pw.println(surname);
-                            pw.flush();
-                            pw.println(age);
-                            pw.flush();
-                            pw.println(FC);
-                            pw.flush();
-                            pw.println(doc_name);
-                            pw.flush();
-                            pw.println(doc_surname);
-                            pw.flush();
-                            pw.println(doc_spec);
-                            pw.flush();
-                            pw.println(month);
-                            pw.flush();
-                            pw.println("END_CMD");
-                            pw.flush();
-                            System.out.println(scanner.nextLine());
-                            break;
-*/
                         case "c":
-/*
-                            boolean control2= false;
-                            var f_code = "";
-                            while(control2 == false) {
-                                System.out.println(" Insert your Fiscal Code: ");
-                                f_code = input.nextLine();
-                                if (f_code.length() != 16) {
-                                    System.err.println("Fiscal Code must have 16 characters ");
-                                }else{
-                                    control2 = true;
-                                }
-                            }
-                            pw.println("CMD_REMOVE");
+                            System.out.println(" Insert your Fiscal Code: ");
+                            var fc2 = input.nextLine();
+
+                            pw.println("CMD_REM_PATIENT");
                             pw.flush();
-                            pw.println(f_code);
+                            pw.println(fc2);
                             pw.flush();
                             pw.println("END_CMD");
                             pw.flush();
+
                             System.out.println(scanner.nextLine());
                             break;
 
                         case "d":
-                            boolean control3= false;
-                            var f_code2 = "";
-                            while(control3 == false) {
-                                System.out.println(" Insert your Fiscal Code: ");
-                                f_code2 = input.nextLine();
-                                if (f_code2.length() != 16) {
-                                    System.err.println("Fiscal Code must have 16 characters ");
-                                }else{
-                                    control3 = true;
-                                }
-                            }
-                            pw.println("CMD_GET");
+                            System.out.println(" Insert your Fiscal Code: ");
+                            var fc3 = input.nextLine();
+
+                            pw.println("CMD_GET_RES");
                             pw.flush();
-                            pw.println(f_code2);
+                            pw.println(fc3);
                             pw.flush();
                             pw.println("END_CMD");
                             pw.flush();
+
                             System.out.println(scanner.nextLine());
 
- */
                             break;
 
                         case "e":
@@ -382,6 +305,7 @@ public class Client {
                             System.out.println(" e-mail: anfucaia@gmail.com");
                             System.out.println(" Telephone number: +39 0931456789");
 
+                            break;
 
                     }
 

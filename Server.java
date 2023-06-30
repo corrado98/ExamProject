@@ -17,6 +17,7 @@ public class Server {
 
     private ArrayList<Reservation> res_list = new ArrayList<>();
     String st = "";
+    boolean free;
 
 
     public synchronized void commandSaveMapDoc(String s){
@@ -74,13 +75,24 @@ public class Server {
 
     public synchronized void remove_doc(String d_fc2, PrintWriter pw){
         commandLoadMapDoc("Doctormap.txt");
+        commandLoadlist("list.txt");
+
         if(doc_map.get(d_fc2)==null){
             response(pw, "Doctor not present");
         }else{
             doc_map.remove(d_fc2);
+            if(res_list.size()!=0) {
+                for (int i = 0; i < res_list.size(); i++) {
+                    if (res_list.get(i).getM().getFC().equals(d_fc2)) {
+                        res_list.remove(i);
+                    }
+                }
+                commandSaveList("list.txt");
+            }
             commandSaveMapDoc("Doctormap.txt");
             response(pw, "Doctor removed");
             System.out.println(doc_map);
+            System.out.println(res_list);
         }
 
 
@@ -103,7 +115,7 @@ public class Server {
 
             for(int i=0; i < copy_map.get(d_fc).getApp_arr().size(); i++){ //Scorro gli appuntamenti per quel dottore
                 if(copy_map.get(d_fc).getApp_arr().get(i).getDay() == d_day2 ){
-                    present = true; //se il giorno della visita già c'è non permette di aagiungere un altro slot
+                    present = true; //se il giorno della visita già c'è non permette di aggiungere un altro slot
                 }
             }
 
@@ -136,28 +148,10 @@ public class Server {
 
     public synchronized void response(PrintWriter pw , String st){
 
+        System.out.println("HO RICEVUTO "+ st);
         pw.println("[SERVER]: "+ st);
         pw.flush();
     }
-    /*
-    public synchronized void readMap(){
-        //map = commandLoadMap();
-        for(String r : map.keySet()){
-            System.out.println(map.get(r));
-        }
-    }
-    public synchronized void commandLoadMap(String s){
-        FileInputStream fis= null;
-        ObjectInputStream ois= null;
-        try {
-            fis = new FileInputStream(s);
-            ois = new ObjectInputStream(fis);
-            map = (HashMap<String, Reservation>) ois.readObject();
-            ois.close();
-        } catch (IOException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-    }*/
 
     public synchronized void commandLoadMapDoc(String s){
         FileInputStream fis= null;
@@ -229,30 +223,70 @@ public class Server {
             String stamp = (i+")"+" "+ name + " "+ surname+ ", "+ sp+ ", Fiscal Code: "+ code).toString();
             d_list.add(stamp);
             i+=1;
-            /*
-            for(int n = 0; n<doc_map.size();n++){
-                pw.println("[SERVER]: Doctor List, Choose one of these doctors: "+ d_list);
-                pw.flush();
-            }*/
+
         }
         pw.println("[SERVER]: Doctor List, Choose one of these doctors: "+ d_list);
         pw.flush();
     }
 
+    public synchronized void remove_patient(String fc2, PrintWriter pw){
+        commandLoadMapPatient("personmap.txt");
+        commandLoadlist("list.txt");
+
+        if(p_map.size()==0){
+            response(pw, "Map of patients is empty! ");
+        }else {
+            p_map.remove(fc2);
+            if(res_list.size()!=0) {
+                for (int i = 0; i < res_list.size(); i++) {
+                    if (res_list.get(i).getP().getFiscalCode().equals(fc2)) {
+                        res_list.remove(i);
+                    }
+                }
+                commandSaveList("list.txt");
+            }
+
+        }
+        response(pw, "Patient removed");
+        commandSaveMapPatient("personmap.txt");
+        System.out.println(p_map);
+        System.out.println(res_list);
+    }
+
+    public synchronized void get_res(String fc3, PrintWriter pw){
+        commandLoadlist("list.txt");
+        ArrayList<Reservation> getres = new ArrayList<>();
+
+        if(res_list.size()==0){
+            response(pw, "List of reservations is empty! ");
+        }else {
+            for(int i= 0; i< res_list.size(); i++){
+            if(res_list.get(i).getP().getFiscalCode().equals(fc3)){
+                getres.add(res_list.get(i));
+            }
+            }
+            response4(pw, getres);
+        }
+    }
+
+
     public synchronized void verify(String fc, PrintWriter pw){
         commandLoadMapPatient("personmap.txt");
         if(p_map.get(fc) != null){
             response3(pw);
+            //pw.flush();
         }else{
-            response(pw, "Person not present! Please Sign in");
+            st = "Person not present! Please Sign in";
+            response(pw, st);
+            st ="";
+            //pw.flush();
         }
     }
 
-    public synchronized void giveappointments(String dfc2,PrintWriter pw){
+    public synchronized void giveappointments(String dfc2,PrintWriter pw, LocalDate start){
         ArrayList<Appointment> copy_app= doc_map.get(dfc2).getApp_arr();
         ArrayList<Integer> day_app = new ArrayList<>();
 
-        LocalDate start = LocalDate.now();
         LocalDate end = LocalDate.of(2023,12,31);
 
         int d = 0;
@@ -273,7 +307,6 @@ public class Server {
                     stop = true;
                 }
             }
-
             if(stop == false){
             start = start.plusDays(1);
         }else{
@@ -284,7 +317,6 @@ public class Server {
 
 
     }
-
     public synchronized void responselocal(PrintWriter pw, LocalDate d, String h){
         pw.println(d);
         pw.flush();
@@ -297,12 +329,25 @@ public class Server {
         commandLoadMapDoc("Doctormap.txt");
         commandLoadMapPatient("personmap.txt");
         Reservation r = new Reservation(p_map.get(c_cf), doc_map.get(d_cf), date, hour);
-        res_list.add(r);
-        commandSaveList("list.txt");
-        response(pw, "Visit created: "+ r);
-        System.out.println(res_list);
-    }
+        free = true;
+        if(res_list.size()!=0) {
+            for (int i = 0; i < res_list.size(); i++) {
+                if ((res_list.get(i).getDay().equals(date)) && (res_list.get(i).getM().getFC().equals(d_cf))) {
+                    free = false;
+                }
+            }
+        }
+        if(free) {
+            //r.setFree(false);
+            res_list.add(r);
+            commandSaveList("list.txt");
+            response(pw, "Visit created: " + r);
+            System.out.println(res_list);
+        }else{
+            response(pw, "Doctor is already occupied in this day, please retry");
+        }
 
+    }
     public synchronized void commandLoadlist(String s){
         FileInputStream fis= null;
         ObjectInputStream ois= null;
@@ -336,82 +381,13 @@ public class Server {
 
 
     public synchronized void response4(PrintWriter pw , ArrayList<Reservation> a){
-
-        pw.println("[SERVER]: "+ a);
+        pw.println("[SERVER]: Your reservations: "+ a);
         pw.flush();
     }
-    /*
-    public synchronized boolean control_visit( Reservation r){
-    boolean visit_control = true;
-        for(String str : map.keySet()){
-            if(map.get(str).getHour() == r.getHour() && map.get(str).getDay() == r.getDay() && map.get(str).getM() == r.getM()){
-                visit_control = false;
-            }
-        }
-        return visit_control;
-    }
 
 
 
-    public synchronized void commandAddReservation(String s, Reservation r, PrintWriter pw){
-        commandLoadMap("Reservation.txt");
-        if(control_visit(r)) {
-            if (map.get(s) != null) {
-                System.err.println("Reservation already present !");
-                System.err.println("Please remove your precedent reservation");
-                st = "Reservation already present, please remove your precedent reservation ..";
-                response(pw, st);
-                st= "";
 
-            } else {
-
-                map.put(s, r);
-                st =  r+ " added";
-                response(pw, st);
-                st = "";
-            }
-
-        }else{
-            System.out.println("Please Retry... ");
-        }
-    }
-    public synchronized void commandRemoveReservation(String s, PrintWriter pw){
-        commandLoadMap("Reservation.txt");
-        if(map.get(s)==null){
-            System.err.println(" This reservation doesn't exist.. Please retry");
-            st = " This reservation doesn't exist.. Please retry ";
-            response(pw, st);
-            st= "";
-        }else {
-            System.out.println("Mappa prima: ");
-            readMap();
-            map.remove(s);
-            System.out.println("Mappa DOPO CANCELLAZIONE: ");
-            readMap();
-            //commandSaveMap();
-            st = " Reservation removed ";
-            response(pw, st);
-            st= "";
-
-        }
-    }
-
-    public synchronized void commandGetReservation(PrintWriter pw, String s){
-        commandLoadMap("Reservation.txt");
-        if(map.get(s)==null){
-            System.err.println(" This reservation doesn't exist.. Please retry");
-            st = " This reservation doesn't exist.. Please retry ";
-            response(pw, st);
-            st= "";
-        }else{
-            Reservation r =map.get(s);
-            System.out.println("Your reservation is "+ r);
-            st = "Your reservation is "+ r;
-            response(pw, st);
-            st= "";
-        }
-
-    }*/
     public static void main(String[] args) {
         var my_server = new Server();
 

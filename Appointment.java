@@ -5,10 +5,15 @@ public class Appointment implements Serializable {
     private int day;
     private String hour;
 
+
+
+
+
     public Appointment(int day, String hour) {
         this.day = day;
         this.hour = hour;
     }
+
 
     public int getDay() {
         return day;

@@ -1,6 +1,7 @@
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.time.LocalDate;
 import java.util.Scanner;
 
 public class ClientManager implements Runnable{
@@ -51,8 +52,6 @@ public class ClientManager implements Runnable{
                         }
 
                         Doctor d = new Doctor(d_name, d_surname, d_spec, d_FC);
-                        //d.setDay(d_day);
-                        //d.setOrario(d_hour);
                         Appointment a = new Appointment(d_day, d_hour);
                         d.setApp_arr(a);
                         this.my_server.commandAddDoctor(d.getFC(), d, pw);
@@ -74,13 +73,15 @@ public class ClientManager implements Runnable{
 
                     case "CMD_GIVE_APPOINTMENTS":
                         var dfc2 = sc.nextLine();
+                        LocalDate data = LocalDate.parse(sc.nextLine());
                         var d_end_cmd3 = sc.nextLine();
+
 
                         if (!d_end_cmd3.equals("END_CMD")) {
                             System.err.println("Format Error !");
                         }
 
-                        this.my_server.giveappointments(dfc2, pw);
+                        this.my_server.giveappointments(dfc2, pw, data);
                         break;
 
                     case "CMD_CREATE_VISIT":
@@ -96,8 +97,6 @@ public class ClientManager implements Runnable{
 
                         this.my_server.createvisit(pw, date, hour, d_cf, c_cf);
                         break;
-
-
 
                     case "CMD_ADD_PATIENT":
 
@@ -123,37 +122,6 @@ public class ClientManager implements Runnable{
 
                         this.my_server.commandAddPatient(p.getFiscalCode(), p, pw);
                         break;
-
-                        /*
-                        var doctor_name = sc.nextLine();
-                        var doctor_surname = sc.nextLine();
-                        var doctor_spec = sc.nextLine();
-                        var month = Integer.parseInt(sc.nextLine());
-                        var end_cmd = sc.nextLine();
-
-                        if (!end_cmd.equals("END_CMD")) {
-                            System.err.println("Format Error !");
-                        }
-
-                        System.out.println("Adding patient... " + name + " " + surname + " " + age + " " + FC);
-                        var patient = new Patient(name, surname, Integer.parseInt(age));
-                        try {
-                            patient.setFiscalCode(FC);
-                        } catch (Exception e) {
-                            System.err.println(e.getMessage());
-                        }
-
-                        Doctor d = new Doctor(doctor_name, doctor_surname, doctor_spec);
-
-                        int r = getReservation(month);// Salviamo giorno
-                        String day = r + "/" + month;
-                        String h = getHour();
-                        System.out.println("Adding Reservation... " + name + " " + surname + ", " + d + ", day: " + day + ", hour: " + h);
-                        Reservation res = new Reservation(patient, d, day, h);
-                        this.my_server.commandAddReservation(patient.getFiscalCode(), res, pw);
-                        //my_server.commandSaveMap();
-                        System.out.println(" ***** MAPPA *****");
-                        this.my_server.readMap();*/
 
                     case "CMD_ADD_RESERVATION":
                         var p_fc = sc.nextLine();
@@ -188,29 +156,32 @@ public class ClientManager implements Runnable{
                         break;
 
 
-                    case "CMD_REMOVE":
+                    case "CMD_REM_PATIENT":
 
-                        var f_code = sc.nextLine();
-                        var end = sc.nextLine();
+                        var fc2= sc.nextLine();
+                        var end3 = sc.nextLine();
 
-                        if (!end.equals("END_CMD")) {
+                        if (!end3.equals("END_CMD")) {
                             System.err.println("Format Error !");
                         }
 
-                        System.out.println("Removing Reservation ");
-                        //this.my_server.commandRemoveReservation(f_code, pw);
+                        this.my_server.remove_patient(fc2, pw);
                         break;
 
-                    case "CMD_GET":
-                        var f_code2 = sc.nextLine();
-                        var end2 = sc.nextLine();
+                    case "CMD_GET_RES":
 
-                        if (!end2.equals("END_CMD")) {
+                        var fc3= sc.nextLine();
+                        var end4 = sc.nextLine();
+
+                        if (!end4.equals("END_CMD")){
                             System.err.println("Format Error !");
                         }
-                        System.out.println("Getting your Reservation ");
-                        //this.my_server.commandGetReservation(pw, f_code2);
+
+                        this.my_server.get_res(fc3, pw);
+
+
                         break;
+
 
                     default:
                         if (!received_command.isBlank()) {
