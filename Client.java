@@ -68,8 +68,18 @@ public class Client {
                             if(doc_FC.length() != 16){
                                 System.out.println("Retry! Fiscal Code must have 16 characters");
                             }else {
-                                System.out.print("Day of your visit (7: sunday, 1: monday, 2: tuesday, 3: wednesday, 4: thursday, 5: friday, 6: saturday): ");
-                                var doc_day_visit = input.nextLine();
+                                System.out.print("Day of your visit (sunday, monday, tuesday, etc..): ");
+                                var doc_day_visit_st = input.nextLine();
+                                int doc_day_visit = 0;
+                                if(doc_day_visit_st.equals("monday")){doc_day_visit = 1;}
+                                else if(doc_day_visit_st.equals("tuesday")){doc_day_visit = 2;}
+                                else if(doc_day_visit_st.equals("wednesday")){doc_day_visit = 3;}
+                                else if(doc_day_visit_st.equals("thursday")){doc_day_visit = 4;}
+                                else if(doc_day_visit_st.equals("friday")){doc_day_visit = 5;}
+                                else if(doc_day_visit_st.equals("saturday")){doc_day_visit = 6;}
+                                else{
+                                    doc_day_visit = 7;
+                                }
                                 System.out.print("Select an hour range (ex. start-end): ");
                                 String doc_hour = input.nextLine();
                                 pw.println("CMD_ADD_DOCTOR");
@@ -135,6 +145,7 @@ public class Client {
                             pw.flush();
                             pw.println("END_CMD");
                             pw.flush();
+                            System.out.println("DAY -> 1: Monday; 2: Tuesday; 3: Wednesday; 4: Thursday; 5: Friday; 6: Saturday; 7: Sunday");
                             System.out.println(scanner.nextLine());
                             break;
 
