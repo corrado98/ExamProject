@@ -43,7 +43,6 @@ public class ClientManager implements Runnable{
                         var d_FC = sc.nextLine();
                         var d_day = Integer.parseInt(sc.nextLine());
                         var d_hour = sc.nextLine();
-                        //var d_end = Integer.parseInt(sc.nextLine());
                         var d_end_cmd = sc.nextLine();
 
 
@@ -88,7 +87,7 @@ public class ClientManager implements Runnable{
                         var date = sc.nextLine();
                         var hour = sc.nextLine();
                         var d_cf = sc.nextLine();
-                        var c_cf = sc.nextLine(); //cod fis cliente
+                        var c_cf = sc.nextLine();
                         var en = sc.nextLine();
 
                         if(!en.equals("END_CMD")){

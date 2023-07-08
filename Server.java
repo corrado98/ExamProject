@@ -9,8 +9,6 @@ import java.util.HashMap;
 
 public class Server {
 
-    //private HashMap<String, Reservation> map = new HashMap<>();
-
     private HashMap<String, Doctor> doc_map = new HashMap<>();
     private HashMap<String, Doctor> copy_map = new HashMap<>();
     private HashMap<String, Patient> p_map = new HashMap<>();
@@ -185,8 +183,6 @@ public class Server {
         System.out.println("La mappa iniziale è :");
         doc_map.put(s,d);
         commandSaveMapDoc("Doctormap.txt");
-        //copy_map=doc_map;
-        //commandSaveCopyMapDoc("copymap.txt");
         System.out.println("Mappa dei medici modificata");
         System.out.println(doc_map);
         st =  d+ " added";
@@ -274,12 +270,10 @@ public class Server {
         commandLoadMapPatient("personmap.txt");
         if(p_map.get(fc) != null){
             response3(pw);
-            //pw.flush();
         }else{
             st = "Person not present! Please Sign in";
             response(pw, st);
             st ="";
-            //pw.flush();
         }
     }
 
@@ -338,7 +332,6 @@ public class Server {
             }
         }
         if(free) {
-            //r.setFree(false);
             res_list.add(r);
             commandSaveList("list.txt");
             response(pw, "Visit created: " + r);
@@ -397,11 +390,11 @@ public class Server {
             while(true){
                 System.out.println("[SERVER]: Waiting for connections.. ");
                 var client_socket = serverSocket.accept();
-                System.out.println("[SERVER]: Accepted connection from "+ client_socket.getRemoteSocketAddress()); // così so l'indirizzo del client
+                System.out.println("[SERVER]: Accepted connection from "+ client_socket.getRemoteSocketAddress()); 
 
 
                 var cm = new ClientManager(client_socket, my_server);
-                new Thread(cm).start(); //per avviare il client manager
+                new Thread(cm).start();
             }
         } catch (IOException e) {
             System.err.println("Server error");
