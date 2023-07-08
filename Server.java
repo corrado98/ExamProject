@@ -78,11 +78,21 @@ public class Server {
         if(doc_map.get(d_fc2)==null){
             response(pw, "Doctor not present");
         }else{
+            int prenotazioni = 0;
             doc_map.remove(d_fc2);
             if(res_list.size()!=0) {
+                System.out.println("Lista prima");
+                System.out.println(res_list);
                 for (int i = 0; i < res_list.size(); i++) {
                     if (res_list.get(i).getM().getFC().equals(d_fc2)) {
-                        res_list.remove(i);
+                        prenotazioni++;
+                    }
+                }
+                for(int n = 0; n<prenotazioni;n++) {
+                    for (int i = 0; i < res_list.size(); i++) {
+                        if (res_list.get(i).getM().getFC().equals(d_fc2)) {
+                            res_list.remove(i);
+                        }
                     }
                 }
                 commandSaveList("list.txt");
@@ -90,6 +100,7 @@ public class Server {
             commandSaveMapDoc("Doctormap.txt");
             response(pw, "Doctor removed");
             System.out.println(doc_map);
+            System.out.println("Lista dopo: ");
             System.out.println(res_list);
         }
 
@@ -232,11 +243,21 @@ public class Server {
         if(p_map.size()==0){
             response(pw, "Map of patients is empty! ");
         }else {
+            int prenotazioni = 0;
             p_map.remove(fc2);
             if(res_list.size()!=0) {
+                System.out.println("Lista prima");
+                System.out.println(res_list);
                 for (int i = 0; i < res_list.size(); i++) {
                     if (res_list.get(i).getP().getFiscalCode().equals(fc2)) {
-                        res_list.remove(i);
+                        prenotazioni++;
+                    }
+                }
+                for(int n = 0; n<prenotazioni;n++) {
+                    for (int i = 0; i < res_list.size(); i++) {
+                        if (res_list.get(i).getP().getFiscalCode().equals(fc2)) {
+                            res_list.remove(i);
+                        }
                     }
                 }
                 commandSaveList("list.txt");
@@ -245,7 +266,9 @@ public class Server {
         }
         response(pw, "Patient removed");
         commandSaveMapPatient("personmap.txt");
+        commandSaveList("list.txt");
         System.out.println(p_map);
+        System.out.println("Lista dopo: ");
         System.out.println(res_list);
     }
 
@@ -390,7 +413,7 @@ public class Server {
             while(true){
                 System.out.println("[SERVER]: Waiting for connections.. ");
                 var client_socket = serverSocket.accept();
-                System.out.println("[SERVER]: Accepted connection from "+ client_socket.getRemoteSocketAddress()); 
+                System.out.println("[SERVER]: Accepted connection from "+ client_socket.getRemoteSocketAddress());
 
 
                 var cm = new ClientManager(client_socket, my_server);
